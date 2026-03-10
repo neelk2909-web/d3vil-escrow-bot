@@ -1,32 +1,26 @@
-from telegram.ext import Updater, CommandHandler
 import os
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 TOKEN = os.environ.get("BOT_TOKEN")
 
-def start(update, context):
-    update.message.reply_text("🔥 Welcome to d3vil Escrow Bot")
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("🔥 Welcome to d3vil Escrow Bot")
 
-def help(update, context):
-    update.message.reply_text(
-        "Commands:\n/newdeal @seller amount"
-    )
+async def newdeal(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    try:
+        seller = context.args[0]
+        amount = context.args[1]
 
-def newdeal(update, context):
+        await update.message.reply_text(
+            f"Deal created with {seller} for {amount} USDT"
+        )
+    except:
+        await update.message.reply_text("Usage: /newdeal @seller amount")
 
-    seller = context.args[0]
-    amount = context.args[1]
+app = ApplicationBuilder().token(TOKEN).build()
 
-    update.message.reply_text(
-        f"Deal created with {seller} for {amount} USDT"
-    )
+app.add_handler(CommandHandler("start", start))
+app.add_handler(CommandHandler("newdeal", newdeal))
 
-updater = Updater(TOKEN, use_context=True)
-
-dp = updater.dispatcher
-
-dp.add_handler(CommandHandler("start", start))
-dp.add_handler(CommandHandler("help", help))
-dp.add_handler(CommandHandler("newdeal", newdeal))
-
-updater.start_polling()
-updater.idle()
+app.run_polling()
