@@ -1,5 +1,4 @@
 import os
-import asyncio
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
@@ -19,19 +18,16 @@ async def newdeal(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except:
         await update.message.reply_text("Usage: /newdeal @seller amount")
 
-async def main():
+def main():
 
     app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("newdeal", newdeal))
 
-    await app.initialize()
-    await app.start()
-    await app.updater.start_polling()
+    print("Bot started...")
 
-    while True:
-        await asyncio.sleep(3600)
+    app.run_polling()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
