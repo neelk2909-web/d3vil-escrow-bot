@@ -1,7 +1,7 @@
 from telegram.ext import Updater, CommandHandler
 import os
 
-TOKEN = os.environ.get("8506879373:AAGqdWa3RNJUbatMJeEZy53hKtOdpLCz5C0")
+TOKEN = os.environ.get("BOT_TOKEN")
 
 def start(update, context):
     update.message.reply_text("🔥 Welcome to d3vil Escrow Bot")
